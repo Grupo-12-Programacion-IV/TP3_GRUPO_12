@@ -14,8 +14,8 @@ public class DaoProducto {
 	
 	public DaoProducto () {}
 	
-		public int altaProducto(Producto producto) {
-		
+	public int altaProducto(Producto producto) {
+	
 		String query= "INSERT INTO productos (Nombre, Precio, Stock, IdCategoria) VALUES ('"+producto.getNombre()+"','"+producto.getPrecio()+"','"+producto.getStock()+"','"+producto.getIdCategoria()+"')";
 		
 		Connection cn =null;
@@ -28,7 +28,35 @@ public class DaoProducto {
 		catch (Exception e){
 			e.printStackTrace();
 		}
-		
+	
 		return filas;
+	}
+
+	public ArrayList<Producto> listarProductos()
+	{
+		ArrayList<Producto> lista = new ArrayList<Producto>();
+
+		try
+		{
+			Connection cn = DriverManager.getConnection(host+dbName, user, pass);
+			Statement st = cn.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM Productos");
+
+			while (rs.next())
+			{
+				Producto p = new Producto();
+				p.setCodigo(rs.getString("Codigo"));
+				p.setNombre(rs.getString("Nombre"));
+				p.setPrecio(rs.getDouble("Precio"));
+				p.setStock(rs.getInt("Stock"));
+				p.setIdCategoria(rs.getInt("IdCategoria"));
+				lista.add(p);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return lista;
 	}
 }
