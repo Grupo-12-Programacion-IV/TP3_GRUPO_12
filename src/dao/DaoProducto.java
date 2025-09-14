@@ -1,6 +1,8 @@
 package dao;
 
 import entidad.Producto;
+
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -76,5 +78,23 @@ public class DaoProducto {
 		}
 		return filas;	
 	}
+	
+	public void EjecutarSPagregarProducto (Producto producto){
+		Connection cn = null;
+		try {
+			cn = DriverManager.getConnection(host+dbName, user, pass);
+			CallableStatement cst = cn.prepareCall("CALL sp_AgregarProducto(?,?,?,?,?,?)");
+			cst.setString(1, producto.getCodigo());
+			cst.setString(2, producto.getNombre());
+			cst.setString(3, producto.getApellido());
+			cst.setFloat(4, producto.getPrecio());
+			cst.setInt(5, producto.getStock());
+			cst.setInt(6, producto.getidCategoria());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
 
 }
