@@ -3,7 +3,9 @@ package dao;
 import entidad.Producto;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DaoProducto {
 
@@ -47,7 +49,7 @@ public class DaoProducto {
 				Producto p = new Producto();
 				p.setCodigo(rs.getString("Codigo"));
 				p.setNombre(rs.getString("Nombre"));
-				p.setPrecio(rs.getDouble("Precio"));
+				p.setPrecio(rs.getFloat("Precio"));
 				p.setStock(rs.getInt("Stock"));
 				p.setIdCategoria(rs.getInt("IdCategoria"));
 				lista.add(p);
@@ -59,4 +61,20 @@ public class DaoProducto {
 		}
 		return lista;
 	}
+	
+	public int BajaProducto(Producto id) {
+		String query = "DELETE FROM Productos AS P WHERE P.Codigo = " + id;
+		int filas = 0;
+		
+		try {
+			Connection cn = DriverManager.getConnection(host+dbName, user, pass);
+			Statement st = cn.createStatement();
+			filas =  st.executeUpdate(query);
+		}
+		catch (Exception e){
+		e.printStackTrace();
+		}
+		return filas;	
+	}
+
 }

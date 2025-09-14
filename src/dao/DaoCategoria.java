@@ -1,12 +1,15 @@
 package dao;
 
-import entidad.Producto;
+import entidad.Categoria;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DaoCategoria
 {
+	
 	private String host = "jdbc:mysql://localhost:3306/";
 	private String user = "root";
 	private String pass = "root";
@@ -20,7 +23,7 @@ public class DaoCategoria
 
         try
         {
-            Connection cn = DriverManager.getConnection(url, user, pass);
+            Connection cn= DriverManager.getConnection(host+dbName,user,pass);
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM Categorias");
 
@@ -38,4 +41,20 @@ public class DaoCategoria
         }
         return lista;  
     }
+	
+	public int BajaCategoria(Categoria id) {
+		String query = "DELETE FROM Categorias AS C WHERE C.IdCategoria = " + id;
+		int filas = 0;
+		
+		try {
+			Connection cn = DriverManager.getConnection(host+dbName, user, pass);
+			Statement st = cn.createStatement();
+			filas =  st.executeUpdate(query);
+		}
+		catch (Exception e){
+		e.printStackTrace();
+		}
+		return filas;	
+	}
+
 }
