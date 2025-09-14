@@ -1,8 +1,11 @@
 package dao;
 
 import entidad.Categoria;
+import entidad.Producto;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -56,5 +59,25 @@ public class DaoCategoria
 		}
 		return filas;	
 	}
+	
+	public int editarCategoria(Categoria categoria) {
+	    String query = "UPDATE categorias SET Nombre = ? WHERE IdCategoria = ?";
+	    int filas = 0;
 
+	    try (Connection cn = DriverManager.getConnection(host + dbName, user, pass);
+	         PreparedStatement pst = cn.prepareStatement(query)) {
+	        
+	    	pst.setString(1, categoria.getNombre());  
+	        pst.setInt(2, categoria.getId()); 
+	        
+
+	        filas = pst.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return filas;
+	}
+	
 }

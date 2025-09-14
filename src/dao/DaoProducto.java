@@ -2,10 +2,13 @@ package dao;
 
 import entidad.Producto;
 
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -86,15 +89,41 @@ public class DaoProducto {
 			CallableStatement cst = cn.prepareCall("CALL sp_AgregarProducto(?,?,?,?,?,?)");
 			cst.setString(1, producto.getCodigo());
 			cst.setString(2, producto.getNombre());
-			cst.setString(3, producto.getApellido());
-			cst.setFloat(4, producto.getPrecio());
-			cst.setInt(5, producto.getStock());
-			cst.setInt(6, producto.getidCategoria());
+			cst.setFloat(3, producto.getPrecio());
+			cst.setInt(4, producto.getStock());
+			cst.setInt(5, producto.getIdCategoria());
+			System.out.println("Se logro agregar");
 		}
 		catch (Exception e){
 			e.printStackTrace();
+			System.out.println("No se logro agregar");
 		}
+	}
+	
+	public int editarProducto(Producto producto, String CodigoOriginal) {
+	    String sql = "UPDATE productos SET Codigo = ?, Nombre = ?, Precio = ?, Stock = ?, idCategoria = ? WHERE Codigo = ?";
+	    int filas = 0;
+
+	    try (Connection cn = DriverManager.getConnection(host + dbName, user, pass);
+	         PreparedStatement ps = cn.prepareStatement(sql)) {
+
+	        ps.setString(1, producto.getCodigo());          
+	        ps.setString(2, producto.getNombre());    
+	        ps.setDouble(3, producto.getPrecio());    
+	        ps.setInt(4, producto.getStock());        
+	        ps.setInt(5, producto.getIdCategoria()); 
+	        ps.setString(6, CodigoOriginal);                 
+
+	        filas = ps.executeUpdate();
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return filas;
+	}
+
+			
 	}
 
 
-}
