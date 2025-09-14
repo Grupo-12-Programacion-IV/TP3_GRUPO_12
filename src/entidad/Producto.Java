@@ -1,8 +1,7 @@
 package entidad;
 
-public class Producto
-{
-    private String codigo;
+public class Producto {
+	private String codigo;
     private String nombre;
     private float precio;
     private int stock;
