@@ -1,5 +1,7 @@
 package Main;
 
+import java.util.ArrayList;
+
 import dao.DaoCategoria;
 import dao.DaoProducto;
 import entidad.Categoria;
@@ -37,6 +39,56 @@ public class Principal {
 
 		DaoP.BajaProducto(pr1);
 		
+		//Editar producto
+		
+		Producto pro = new Producto("1","Producto1",450,20,1);
+
+        int filas_3 = DaoP.editarProducto(pro, "1");
+
+        if(filas > 0) {
+            System.out.println("Se actualizo correctamente");
+        }
+        else {
+            System.out.println("No se encontro el producto");
+        }
+        
+        //Editar categoria
+
+         Categoria Cat = new Categoria(1,"Nueva categoria");
+
+         int fila = DaoC.editarCategoria(Cat);
+
+        if(fila > 0) {
+            System.out.println("Se actualizo correctamente");
+        }
+        else {
+            System.out.println("No se encontro la categoria");
+        }
+        
+        //Lista Productos
+        
+        ArrayList<Producto> productos = DaoP.listarProductos();
+
+        for (Producto p : productos) {
+            System.out.println(
+                "Código: " + p.getCodigo() +
+                " | Nombre: " + p.getNombre() +
+                " | Precio: " + p.getPrecio() +
+                " | Stock: " + p.getStock() +
+                " | IdCategoria: " + p.getIdCategoria());
+
+    }
+        
+        //Lista Categoria
+        
+        ArrayList<Categoria> categorias = DaoC.listadoCategoria();
+
+        for (Categoria c : categorias) {
+            System.out.println("ID: " + c.getId() + " - Nombre: " + c.getNombre());
+
+
+
 	}
 
+}
 }
