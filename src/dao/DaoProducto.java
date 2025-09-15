@@ -2,7 +2,6 @@ package dao;
 
 import entidad.Producto;
 
-
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,39 +17,38 @@ public class DaoProducto {
 	private String user = "root";
 	private String pass = "root";
 	private String dbName = "bdinventario";
-	
-	public DaoProducto () {}
-	
+
+	public DaoProducto() {
+	}
+
 	public int altaProducto(Producto producto) {
-	
-		String query= "INSERT INTO productos (Codigo, Nombre, Precio, Stock, IdCategoria) VALUES ('"+producto.getCodigo()+"','"+producto.getNombre()+"','"+producto.getPrecio()+"','"+producto.getStock()+"','"+producto.getIdCategoria()+"')";
-		
-		Connection cn =null;
+
+		String query = "INSERT INTO productos (Codigo, Nombre, Precio, Stock, IdCategoria) VALUES ('"
+				+ producto.getCodigo() + "','" + producto.getNombre() + "','" + producto.getPrecio() + "','"
+				+ producto.getStock() + "','" + producto.getIdCategoria() + "')";
+
+		Connection cn = null;
 		int filas = 0;
 		try {
-			cn= DriverManager.getConnection(host+dbName,user,pass);
-			Statement st= cn.createStatement();
-			filas= st.executeUpdate(query);
-		}
-		catch (Exception e){
+			cn = DriverManager.getConnection(host + dbName, user, pass);
+			Statement st = cn.createStatement();
+			filas = st.executeUpdate(query);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
+
 		return filas;
 	}
 
-	public ArrayList<Producto> listarProductos()
-	{
+	public ArrayList<Producto> listarProductos() {
 		ArrayList<Producto> lista = new ArrayList<Producto>();
 
-		try
-		{
-			Connection cn = DriverManager.getConnection(host+dbName, user, pass);
+		try {
+			Connection cn = DriverManager.getConnection(host + dbName, user, pass);
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM Productos");
 
-			while (rs.next())
-			{
+			while (rs.next()) {
 				Producto p = new Producto();
 				p.setCodigo(rs.getString("Codigo"));
 				p.setNombre(rs.getString("Nombre"));
@@ -59,71 +57,65 @@ public class DaoProducto {
 				p.setIdCategoria(rs.getInt("IdCategoria"));
 				lista.add(p);
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return lista;
 	}
-	
+
 	public int BajaProducto(Producto id) {
 		String query = "DELETE FROM Productos AS P WHERE P.Codigo = " + id;
 		int filas = 0;
-		
+
 		try {
-			Connection cn = DriverManager.getConnection(host+dbName, user, pass);
+			Connection cn = DriverManager.getConnection(host + dbName, user, pass);
 			Statement st = cn.createStatement();
-			filas =  st.executeUpdate(query);
+			filas = st.executeUpdate(query);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch (Exception e){
-		e.printStackTrace();
-		}
-		return filas;	
+		return filas;
 	}
-	
-	public void EjecutarSPagregarProducto (Producto producto){
+
+	public void EjecutarSPagregarProducto(Producto producto) {
 		Connection cn = null;
 		try {
-			cn = DriverManager.getConnection(host+dbName, user, pass);
+			cn = DriverManager.getConnection(host + dbName, user, pass);
 			CallableStatement cst = cn.prepareCall("CALL sp_AgregarProducto(?,?,?,?,?)");
 			cst.setString(1, producto.getCodigo());
 			cst.setString(2, producto.getNombre());
 			cst.setFloat(3, producto.getPrecio());
 			cst.setInt(4, producto.getStock());
 			cst.setInt(5, producto.getIdCategoria());
+			cst.execute();
 			System.out.println("Se logro agregar");
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("No se logro agregar");
 		}
 	}
-	
+
 	public int editarProducto(Producto producto, String CodigoOriginal) {
-	    String sql = "UPDATE productos SET Codigo = ?, Nombre = ?, Precio = ?, Stock = ?, idCategoria = ? WHERE Codigo = ?";
-	    int filas = 0;
+		String sql = "UPDATE productos SET Codigo = ?, Nombre = ?, Precio = ?, Stock = ?, idCategoria = ? WHERE Codigo = ?";
+		int filas = 0;
 
-	    try (Connection cn = DriverManager.getConnection(host + dbName, user, pass);
-	         PreparedStatement ps = cn.prepareStatement(sql)) {
+		try (Connection cn = DriverManager.getConnection(host + dbName, user, pass);
+				PreparedStatement ps = cn.prepareStatement(sql)) {
 
-	        ps.setString(1, producto.getCodigo());          
-	        ps.setString(2, producto.getNombre());    
-	        ps.setDouble(3, producto.getPrecio());    
-	        ps.setInt(4, producto.getStock());        
-	        ps.setInt(5, producto.getIdCategoria()); 
-	        ps.setString(6, CodigoOriginal);                 
+			ps.setString(1, producto.getCodigo());
+			ps.setString(2, producto.getNombre());
+			ps.setDouble(3, producto.getPrecio());
+			ps.setInt(4, producto.getStock());
+			ps.setInt(5, producto.getIdCategoria());
+			ps.setString(6, CodigoOriginal);
 
-	        filas = ps.executeUpdate();
-	        
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+			filas = ps.executeUpdate();
 
-	    return filas;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return filas;
 	}
 
-			
-	}
-
-
+}
