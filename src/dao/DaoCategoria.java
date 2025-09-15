@@ -15,7 +15,7 @@ public class DaoCategoria
 	
 	private String host = "jdbc:mysql://localhost:3306/";
 	private String user = "root";
-	private String pass = "root";
+	private String pass = "BaseDeDatos_1";
 	private String dbName = "bdinventario";
 	
 	public DaoCategoria (){}
@@ -46,13 +46,13 @@ public class DaoCategoria
     }
 	
 	public int BajaCategoria(Categoria id) {
-		String query = "DELETE FROM Categorias AS C WHERE C.IdCategoria = " + id;
+		String query = "DELETE FROM Categorias WHERE IdCategoria = ?";
 		int filas = 0;
 		
-		try {
-			Connection cn = DriverManager.getConnection(host+dbName, user, pass);
-			Statement st = cn.createStatement();
-			filas =  st.executeUpdate(query);
+		try (Connection cn = DriverManager.getConnection(host+dbName, user, pass);
+		PreparedStatement pst = cn.prepareStatement(query)){
+			pst.setInt(1, id.getId());
+			filas = pst.executeUpdate();
 		}
 		catch (Exception e){
 		e.printStackTrace();

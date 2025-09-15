@@ -86,7 +86,7 @@ public class DaoProducto {
 		Connection cn = null;
 		try {
 			cn = DriverManager.getConnection(host+dbName, user, pass);
-			CallableStatement cst = cn.prepareCall("CALL sp_AgregarProducto(?,?,?,?,?,?)");
+			CallableStatement cst = cn.prepareCall("CALL sp_AgregarProducto(?,?,?,?,?)");
 			cst.setString(1, producto.getCodigo());
 			cst.setString(2, producto.getNombre());
 			cst.setFloat(3, producto.getPrecio());
