@@ -23,7 +23,7 @@ public class DaoProducto {
 	
 	public int altaProducto(Producto producto) {
 	
-		String query= "INSERT INTO productos (Nombre, Precio, Stock, IdCategoria) VALUES ('"+producto.getNombre()+"','"+producto.getPrecio()+"','"+producto.getStock()+"','"+producto.getIdCategoria()+"')";
+		String query= "INSERT INTO productos (Codigo, Nombre, Precio, Stock, IdCategoria) VALUES ('"+producto.getCodigo()+"','"+producto.getNombre()+"','"+producto.getPrecio()+"','"+producto.getStock()+"','"+producto.getIdCategoria()+"')";
 		
 		Connection cn =null;
 		int filas = 0;
